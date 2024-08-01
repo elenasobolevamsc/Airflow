@@ -1,0 +1,14 @@
+[2024-08-01T19:30:24.212+0000] {taskinstance.py:1979} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: testing_clickhouse.ch_list_count_rows_start_of_month manual__2024-08-01T19:30:22.594115+00:00 [queued]>
+[2024-08-01T19:30:24.220+0000] {taskinstance.py:1979} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: testing_clickhouse.ch_list_count_rows_start_of_month manual__2024-08-01T19:30:22.594115+00:00 [queued]>
+[2024-08-01T19:30:24.220+0000] {taskinstance.py:2193} INFO - Starting attempt 1 of 1
+[2024-08-01T19:30:24.233+0000] {taskinstance.py:2217} INFO - Executing <Task(ClickHouseOperatorExtended): ch_list_count_rows_start_of_month> on 2024-08-01 19:30:22.594115+00:00
+[2024-08-01T19:30:24.239+0000] {standard_task_runner.py:60} INFO - Started process 259 to run task
+[2024-08-01T19:30:24.243+0000] {standard_task_runner.py:87} INFO - Running: ['***', 'tasks', 'run', 'testing_clickhouse', 'ch_list_count_rows_start_of_month', 'manual__2024-08-01T19:30:22.594115+00:00', '--job-id', '41', '--raw', '--subdir', 'DAGS_FOLDER/test_clickhouse.py', '--cfg-path', '/tmp/tmp0c98liub']
+[2024-08-01T19:30:24.245+0000] {standard_task_runner.py:88} INFO - Job 41: Subtask ch_list_count_rows_start_of_month
+[2024-08-01T19:30:24.285+0000] {task_command.py:423} INFO - Running <TaskInstance: testing_clickhouse.ch_list_count_rows_start_of_month manual__2024-08-01T19:30:22.594115+00:00 [running]> on host 16c05e324510
+[2024-08-01T19:30:24.359+0000] {taskinstance.py:2513} INFO - Exporting env vars: AIRFLOW_CTX_DAG_OWNER='Smalch' AIRFLOW_CTX_DAG_ID='testing_clickhouse' AIRFLOW_CTX_TASK_ID='ch_list_count_rows_start_of_month' AIRFLOW_CTX_EXECUTION_DATE='2024-08-01T19:30:22.594115+00:00' AIRFLOW_CTX_TRY_NUMBER='1' AIRFLOW_CTX_DAG_RUN_ID='manual__2024-08-01T19:30:22.594115+00:00'
+[2024-08-01T19:30:24.367+0000] {base.py:83} INFO - Using connection ID 'clickhouse' for task execution.
+[2024-08-01T19:30:24.368+0000] {clickhouse.py:79} INFO - select now()
+[2024-08-01T19:30:25.353+0000] {taskinstance.py:1149} INFO - Marking task as SUCCESS. dag_id=testing_clickhouse, task_id=ch_list_count_rows_start_of_month, execution_date=20240801T193022, start_date=20240801T193024, end_date=20240801T193025
+[2024-08-01T19:30:25.377+0000] {local_task_job_runner.py:234} INFO - Task exited with return code 0
+[2024-08-01T19:30:25.392+0000] {taskinstance.py:3312} INFO - 0 downstream tasks scheduled from follow-on schedule check

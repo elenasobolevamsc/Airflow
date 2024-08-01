@@ -1,0 +1,104 @@
+[2024-08-01T19:23:28.994+0000] {taskinstance.py:1979} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: churn_prediction_etl.churn_prediction manual__2024-08-01T19:23:09.209335+00:00 [queued]>
+[2024-08-01T19:23:29.004+0000] {taskinstance.py:1979} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: churn_prediction_etl.churn_prediction manual__2024-08-01T19:23:09.209335+00:00 [queued]>
+[2024-08-01T19:23:29.004+0000] {taskinstance.py:2193} INFO - Starting attempt 3 of 3
+[2024-08-01T19:23:29.024+0000] {taskinstance.py:2217} INFO - Executing <Task(ClickHouseOperatorExtended): churn_prediction> on 2024-08-01 19:23:09.209335+00:00
+[2024-08-01T19:23:29.034+0000] {standard_task_runner.py:60} INFO - Started process 159 to run task
+[2024-08-01T19:23:29.039+0000] {standard_task_runner.py:87} INFO - Running: ['***', 'tasks', 'run', 'churn_prediction_etl', 'churn_prediction', 'manual__2024-08-01T19:23:09.209335+00:00', '--job-id', '40', '--raw', '--subdir', 'DAGS_FOLDER/churn_prediction_etl.py', '--cfg-path', '/tmp/tmpc3iwdt2e']
+[2024-08-01T19:23:29.042+0000] {standard_task_runner.py:88} INFO - Job 40: Subtask churn_prediction
+[2024-08-01T19:23:29.109+0000] {task_command.py:423} INFO - Running <TaskInstance: churn_prediction_etl.churn_prediction manual__2024-08-01T19:23:09.209335+00:00 [running]> on host 16c05e324510
+[2024-08-01T19:23:29.233+0000] {taskinstance.py:2513} INFO - Exporting env vars: AIRFLOW_CTX_DAG_OWNER='Smalch' AIRFLOW_CTX_DAG_ID='churn_prediction_etl' AIRFLOW_CTX_TASK_ID='churn_prediction' AIRFLOW_CTX_EXECUTION_DATE='2024-08-01T19:23:09.209335+00:00' AIRFLOW_CTX_TRY_NUMBER='3' AIRFLOW_CTX_DAG_RUN_ID='manual__2024-08-01T19:23:09.209335+00:00'
+[2024-08-01T19:23:29.246+0000] {base.py:83} INFO - Using connection ID '***' for task execution.
+[2024-08-01T19:23:29.247+0000] {clickhouse.py:79} INFO - CREATE TABLE telecom.tab1
+ENGINE = MergeTree()
+ORDER BY customerID
+AS
+SELECT customerID
+	, BeginDate	
+	, EndDate
+	, Type
+	, PaperlessBilling
+	, PaymentMethod
+	, MonthlyCharges
+	, TotalCharges
+	, IF(EndDate = 'No', 0, 1) AS Churn
+	, IF(EndDate = 'No', '2020-02-01', EndDate) AS EndDate_new
+FROM telecom.contract
+[2024-08-01T19:23:29.252+0000] {taskinstance.py:2731} ERROR - Task failed with exception
+Traceback (most recent call last):
+  File "/home/airflow/.local/lib/python3.8/site-packages/airflow/models/taskinstance.py", line 444, in _execute_task
+    result = _execute_callable(context=context, **execute_callable_kwargs)
+  File "/home/airflow/.local/lib/python3.8/site-packages/airflow/models/taskinstance.py", line 414, in _execute_callable
+    return execute_callable(context=context, **execute_callable_kwargs)
+  File "/opt/airflow/dags/lib/clickhouse_operator_extended.py", line 7, in execute
+    return self._hook_execute()
+  File "/home/airflow/.local/lib/python3.8/site-packages/airflow_clickhouse_plugin/operators/clickhouse.py", line 69, in _hook_execute
+    return hook.execute(
+  File "/home/airflow/.local/lib/python3.8/site-packages/airflow_clickhouse_plugin/hooks/clickhouse.py", line 80, in execute
+    last_result = conn.execute(
+  File "/home/airflow/.local/lib/python3.8/site-packages/clickhouse_driver/client.py", line 370, in execute
+    with self.disconnect_on_error(query, settings):
+  File "/usr/local/lib/python3.8/contextlib.py", line 113, in __enter__
+    return next(self.gen)
+  File "/home/airflow/.local/lib/python3.8/site-packages/clickhouse_driver/client.py", line 314, in disconnect_on_error
+    self.establish_connection(settings)
+  File "/home/airflow/.local/lib/python3.8/site-packages/clickhouse_driver/client.py", line 301, in establish_connection
+    self.connection.force_connect()
+  File "/home/airflow/.local/lib/python3.8/site-packages/clickhouse_driver/connection.py", line 254, in force_connect
+    self.connect()
+  File "/home/airflow/.local/lib/python3.8/site-packages/clickhouse_driver/connection.py", line 396, in connect
+    return self._init_connection(host, port)
+  File "/home/airflow/.local/lib/python3.8/site-packages/clickhouse_driver/connection.py", line 340, in _init_connection
+    self.receive_hello()
+  File "/home/airflow/.local/lib/python3.8/site-packages/clickhouse_driver/connection.py", line 525, in receive_hello
+    raise self.receive_exception()
+clickhouse_driver.errors.ServerException: Code: 516.
+DB::Exception: default: Authentication failed: password is incorrect, or there is no user with such name.
+
+If you have installed ClickHouse and forgot password you can reset it in the configuration file.
+The password for default user is typically located at /etc/clickhouse-server/users.d/default-password.xml
+and deleting this file will reset the password.
+See also /etc/clickhouse-server/users.xml on the server where ClickHouse is installed.
+
+. Stack trace:
+
+0. DB::Exception::Exception(DB::Exception::MessageMasked&&, int, bool) @ 0x000000000d01e6db
+1. DB::Exception::Exception(PreformattedMessage&&, int) @ 0x00000000078dd20c
+2. DB::AccessControl::authenticate(DB::Credentials const&, Poco::Net::IPAddress const&, String const&) const @ 0x000000001043d2d8
+3. DB::Session::authenticate(DB::Credentials const&, Poco::Net::SocketAddress const&) @ 0x000000001181f084
+4. DB::TCPHandler::receiveHello() @ 0x0000000012ae169d
+5. DB::TCPHandler::runImpl() @ 0x0000000012ad5c5f
+6. DB::TCPHandler::run() @ 0x0000000012af2b38
+7. Poco::Net::TCPServerConnection::start() @ 0x00000000153ce307
+8. Poco::Net::TCPServerDispatcher::run() @ 0x00000000153ce799
+9. Poco::PooledThread::run() @ 0x000000001539b4a1
+10. Poco::ThreadImpl::runnableEntry(void*) @ 0x0000000015399a5d
+11. ? @ 0x00007fe39169ca94
+12. ? @ 0x00007fe391729c3c
+
+[2024-08-01T19:23:29.259+0000] {taskinstance.py:1149} INFO - Marking task as FAILED. dag_id=churn_prediction_etl, task_id=churn_prediction, execution_date=20240801T192309, start_date=20240801T192328, end_date=20240801T192329
+[2024-08-01T19:23:29.286+0000] {standard_task_runner.py:107} ERROR - Failed to execute job 40 for task churn_prediction (Code: 516.
+DB::Exception: default: Authentication failed: password is incorrect, or there is no user with such name.
+
+If you have installed ClickHouse and forgot password you can reset it in the configuration file.
+The password for default user is typically located at /etc/clickhouse-server/users.d/default-password.xml
+and deleting this file will reset the password.
+See also /etc/clickhouse-server/users.xml on the server where ClickHouse is installed.
+
+. Stack trace:
+
+0. DB::Exception::Exception(DB::Exception::MessageMasked&&, int, bool) @ 0x000000000d01e6db
+1. DB::Exception::Exception(PreformattedMessage&&, int) @ 0x00000000078dd20c
+2. DB::AccessControl::authenticate(DB::Credentials const&, Poco::Net::IPAddress const&, String const&) const @ 0x000000001043d2d8
+3. DB::Session::authenticate(DB::Credentials const&, Poco::Net::SocketAddress const&) @ 0x000000001181f084
+4. DB::TCPHandler::receiveHello() @ 0x0000000012ae169d
+5. DB::TCPHandler::runImpl() @ 0x0000000012ad5c5f
+6. DB::TCPHandler::run() @ 0x0000000012af2b38
+7. Poco::Net::TCPServerConnection::start() @ 0x00000000153ce307
+8. Poco::Net::TCPServerDispatcher::run() @ 0x00000000153ce799
+9. Poco::PooledThread::run() @ 0x000000001539b4a1
+10. Poco::ThreadImpl::runnableEntry(void*) @ 0x0000000015399a5d
+11. ? @ 0x00007fe39169ca94
+12. ? @ 0x00007fe391729c3c
+; 159)
+[2024-08-01T19:23:29.333+0000] {local_task_job_runner.py:234} INFO - Task exited with return code 1
+[2024-08-01T19:23:29.382+0000] {taskinstance.py:3312} INFO - 0 downstream tasks scheduled from follow-on schedule check
